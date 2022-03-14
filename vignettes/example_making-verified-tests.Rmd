@@ -1,0 +1,149 @@
+---
+title: "Automatic verified tests using jaspTools"
+author: "Simon Kucharsky"
+date: '2022-03-14'
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{example_making-verified-tests}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## The problem
+
+We have a bunch of verified unit tests in the book by Jonas, but currently, we need to manually specify new verified unit tests both in the book and in the module. This is doubling the work and increasing the changes that the book and the actuall state of the modules get de-synchronized.
+
+## Proposal solution
+
+Add new features to `jaspTools` that help R programmers write verified unit tests. The code is then used both in the module itself, as well as for generating the chapters in the verification book.
+
+I wrote a quick implementation. You can download my branch of `jaspTools` that contains the functionality:
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+# I am not running this in the .Rmd file so that I don't screw with people's jaspTools
+remotes::install_github("kucharssim/jaspTools@upgradeTests")
+```
+
+```{r}
+library(jaspTools)
+```
+
+### 1) Create a verified example
+
+The first step would be to create a verified example. This example is meant to be human-readable, possibly with screenshots from other programs for comparison, references, etc. So we will make the example as an .Rmd file.
+
+`jaspTools` can then provide tools to make that file. The function `useTestVignette` takes two main arguments: `analysis` which is a string which tells the function which analysis is tested in this example, and `name` which takes the name of the example.
+
+```{r eval=FALSE, include=TRUE}
+jaspTools::useTestVignette(analysis = "Descriptives", name = "Sleep dataset")
+```
+
+```
+✓ Setting active project to '/Users/skuchar/JASP/Develop/jaspModules/jaspDescriptives'
+✓ Adding 'knitr' to Suggests field in DESCRIPTION
+✓ Setting VignetteBuilder field in DESCRIPTION to 'knitr'
+✓ Creating 'vignettes/tests/'
+✓ Adding '^vignettes/tests$' to '.Rbuildignore'
+✓ Adding 'inst/doc' to '.gitignore'
+✓ Writing 'vignettes/tests/descriptives-sleep-dataset.Rmd'
+• Modify 'vignettes/tests/descriptives-sleep-dataset.Rmd'
+```
+
+
+This function creates a vignette under `vignettes/tests/` in the active `jaspModule` project, and fills it with some basic structure that helps the R programmers create the example. Optionally, if `open` argument is set to true, the vignette is automatically opened in the developer's text editor. The template is stored in the `jaspTools` package, and automatically formats the basic example to fit the context of the active module and the specified analysis.
+
+The most important part of the template is this:
+
+```
+### JASP results
+
+The analysis can be run as follows:
+
+\```{r run-analysis, purl = TRUE}
+results <- jaspDescriptives::Descriptives(data = data)
+\```
+
+
+<!-- Write here unit tests -->
+
+\```{r unit-tests, purl = TRUE}
+testthat::test_that("Sleep dataset works", {
+  # jaspTools::expect_jasp_table(results[["mainTable"]])
+  # jaspTools::expect_jasp_plot (results[["mainPlot"]] )
+})
+\```
+```
+
+The generated `run-analysis` code chunk shows how to run the analysis in R. The `unit-tests` code chunk defines unit tests. Both chunks specify `purl = TRUE`, which will be important for running the tests in the current vignette as a unit test for the package.
+
+The template relies on two assumptions:
+
+1. The analysis can be already run in syntax mode, not using `jaspTools`. That is why in `jaspDescriptives::Descriptives(data = data)` we use the `data` argument, not the `dataset` argument. The reason for this is that the code will be visible in the verification book, and so we can also use this as a resource for people to look up specific examples on how to run a JASP analysis in R. Additionally, the tests then also serve as a test of the syntax layer, giving us a better coverage of the functions people will use in R.
+
+2. There will be two new functions, `jaspTools::expect_jasp_table()` and `jaspTools::expect_jasp_plot()`. The idea is that they will utilize the snapshot functionality of the 3rd edition of `testthat`. We already use snapshot testing for figures, but now we can also use it for tables, with `expect_jasp_table()` being a thin wrapper around `testthat::expect_snapshot()`. Technically, we would not need to implement `jaspTools::expect_jasp_plot()`, but it seems to be nice for consistency.
+
+
+For the purpose of this example, I just added the following test:
+
+```{r eval=FALSE, include=TRUE}
+testthat::test_that("Sleep dataset works", {
+  testthat::expect_snapshot(data.frame(variable = "contNormal", 
+                                       mean     = 0.3434533231256709235, 
+                                       sd       = 0.3434533231256709235))
+})
+```
+
+
+### 2) Test the vignette
+
+`jaspTools` provides a function to run the vignette as a test file. It is recommended to run this function once the vignette is made. If snapshot testing is used, this will generate the snapshots that we will be testing in the future. The snapshots will be created under `tests/testthat/_snaps/` folder. 
+
+```{r eval=FALSE, include=TRUE}
+jaspTools::testVignette("descriptives-sleep-dataset")
+```
+
+```
+══ Testing test-vignette-descriptives-sleep-dataset.R ═════════════════════════════════════════════════════════════════════════════════════
+[ FAIL 0 | WARN 1 | SKIP 0 | PASS 1 ]
+
+── Warning (test-vignette-descriptives-sleep-dataset.R:13:3): Sleep dataset works ─────────────────────
+Adding new snapshot:
+Code
+  data.frame(variable = "contNormal", mean = 0.343453323125671, sd = 0.343453323125671)
+Output
+      variable      mean        sd
+  1 contNormal 0.3434533 0.3434533
+```
+
+And this is how the generated snapshot looks:
+
+```{r}
+writeLines(readLines(usethis::proj_path("tests/testthat/_snaps/vignette-descriptives-sleep-dataset.md")))
+```
+
+After verifying this output, the test vignette is finished.
+
+Running the tests in the vignette can be done again by running `jaspTools::testVignette("descriptives-sleep-dataset")`. Alternatively, we can run `jaspTools::testVignettes()` function, which can take an optional argument `analysis`. If the argument is left empty, all test vignettes will be tested. Otherwise, only vignettes associated with the specific analysis will be tested.
+
+```{r}
+jaspTools::testVignettes()
+```
+
+Plan: Integrate vignette testing with `jaspTools::testAnalysis()` and `jaspTools::testAll()` functions.
+
+### 3) Using the test vignette
+
+The outcome of this that for each verified example, we have a single source, inside of `vignettes/tests/`. 
+
+We can automatically knit and insert the vignette into the verification project. So with this setup, we have three purposes for a single vignette file:
+
+1. Document that the JASP analysis is correct
+2. Demonstrate how to use an R Syntax to run the analysis
+3. Use the example in the vignette as a source for unit-testing in the module itself
+
+
+### Things to resolve
+
+- Where should example data sets live? Currently, we just put them in the `tests/testthat/` folder, but it seems to me that if we generate vignettes using these data sets, we should put them properly inside of the module under `data/*.Rdata`, or `inst/extdata/*.csv`. Then, the vignettes can show the users how to get the data we used for testing much easier. 
+
+- I have not looked into integrating vignette testing with `jaspTools::testAll()`. Currently, all functionality I quickly wrote now followed conventional assumptions for package development according to the `usethis` package (wrt working directory and active projects, etc.). `jaspTools` in general however does not follow that convention (e.g., it is possible to run `jaspTools::testAnalysis("Descriptives")` even when the working directory is not inside of the `jaspDescriptives` project). Further, the current code assumes that the tests always run on a source package, not an installed package. Are there any use cases where we need this? That is, do we ever run the tests from outside of the module, and do we ever run the unit tests as an installed package, not as a source package?

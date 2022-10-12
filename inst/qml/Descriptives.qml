@@ -98,19 +98,19 @@ Form
 		{
 			title: qsTr("Central tendency")
 
-			CheckBox { name: "mode";			label: qsTr("Mode");						info:	qsTr("Return median.")	}
-			CheckBox { name: "median";			label: qsTr("Median");						info:	qsTr("Return mode.")	}
-			CheckBox { name: "mean";			label: qsTr("Mean");	checked: true;		info:	qsTr("Return mean.")	}
+			CheckBox { name: "mode";			label: qsTr("Mode");						info: qsTr("Return median.")	}
+			CheckBox { name: "median";			label: qsTr("Median");						info: qsTr("Return mode.")	}
+			CheckBox { name: "mean";			label: qsTr("Mean");	checked: true;		info: qsTr("Return mean.")	}
 		}
 
 		Group
 		{
 			title:	qsTr("Distribution")
 
-			CheckBox { name: "skewness";			label: qsTr("Skewness");						}
-			CheckBox { name: "kurtosis";			label: qsTr("Kurtosis");						}
-			CheckBox { name: "shapiroWilkTest";		label: qsTr("Shapiro-Wilk test");			}
-			CheckBox { name: "sum";					label: qsTr("Sum");							}
+			CheckBox { name: "skewness";			label: qsTr("Skewness");			info: qsTr("Return skewness.")			}
+			CheckBox { name: "kurtosis";			label: qsTr("Kurtosis");			info: qsTr("Return kurtosis.")			}
+			CheckBox { name: "shapiroWilkTest";		label: qsTr("Shapiro-Wilk test");	info: qsTr("Shapiro-Wilk test of normality.")		}
+			CheckBox { name: "sum";					label: qsTr("Sum");					info: qsTr("Return the sum of all values.")		}
 		}
 
 		Group
@@ -119,16 +119,16 @@ Form
 			columns:			2
 			Layout.columnSpan:	2
 
-			CheckBox { name: "seMean";						label: qsTr("S.E. mean")							}
-			CheckBox { name: "sd";							label: qsTr("Std. deviation");		checked: true	}
-			CheckBox { name: "coefficientOfVariation";		label: qsTr("Coefficient of variation");			}
-			CheckBox { name: "mad";							label: qsTr("MAD")									}
-			CheckBox { name: "madRobust";					label: qsTr("MAD robust")							}
-			CheckBox { name: "iqr";							label: qsTr("IQR")									}
-			CheckBox { name: "variance";					label: qsTr("Variance")								}
-			CheckBox { name: "range";						label: qsTr("Range")								}
-			CheckBox { name: "minimum";						label: qsTr("Minimum");				checked: true	}
-			CheckBox { name: "maximum";						label: qsTr("Maximum");				checked: true	}
+			CheckBox { name: "seMean";						label: qsTr("S.E. mean");							info: qsTr("Return standard error of the mean.")						}
+			CheckBox { name: "sd";							label: qsTr("Std. deviation");		checked: true;	info: qsTr("Return standard deviation with Bessel's correction.")		}
+			CheckBox { name: "coefficientOfVariation";		label: qsTr("Coefficient of variation");			info: qsTr("Return coefficient of variation.")							}
+			CheckBox { name: "mad";							label: qsTr("MAD");									info: qsTr("Return mean absolute deviation (MAD) from median.")			}
+			CheckBox { name: "madRobust";					label: qsTr("MAD robust");							info: qsTr("Return mean absolute deviation (MAD) from median, scaled with a constant 1.4826 to ensure consistency with standard deviation assuming normality.")}
+			CheckBox { name: "iqr";							label: qsTr("IQR");									info: qsTr("Return inter-quartile range (IQR).")						}
+			CheckBox { name: "variance";					label: qsTr("Variance");							info: qsTr("Return variance with Bessel's correction.")					}
+			CheckBox { name: "range";						label: qsTr("Range");								info: qsTr("Return range (maximum-minimum).")							}
+			CheckBox { name: "minimum";						label: qsTr("Minimum");				checked: true;	info: qsTr("Return minimum.")											}
+			CheckBox { name: "maximum";						label: qsTr("Maximum");				checked: true;	info: qsTr("Return maximum.")											}
 		}
 
 		CheckBox { name: "statisticsValuesAreGroupMidpoints"; label: qsTr("Values are group midpoints"); debug: true }
@@ -144,8 +144,8 @@ Form
 			Group
 			{
 				columns: 2
-				CheckBox {				name: "distributionPlots";			label: qsTr("Distribution plots");	id:	distributionPlots					}
-				CheckBox {				name: "correlationPlots";	label: qsTr("Correlation plots");	id:	correlationPlots			}
+				CheckBox {	name: "distributionPlots";	label: qsTr("Distribution plots");	id:	distributionPlots;	info: qsTr("If selected, distribution plots are shown.")		}
+				CheckBox {	name: "correlationPlots";	label: qsTr("Correlation plots");	id:	correlationPlots;	info: qsTr("If selected, correlation plots are shown.")			}
 			}
 
 			Group
@@ -153,11 +153,12 @@ Form
 				enabled: distributionPlots.checked || correlationPlots.checked
 
 				indent:		true
-				CheckBox {	name: "distributionAndCorrelationPlotDensity";		label: qsTr("Display density")						}
-				CheckBox {	name: "distributionAndCorrelationPlotRugMarks";		label: qsTr("Display rug marks")					}
+				CheckBox {	name: "distributionAndCorrelationPlotDensity";		label: qsTr("Display density");		info: qsTr("Display density in distribution and correlation plots.")				}
+				CheckBox {	name: "distributionAndCorrelationPlotRugMarks";		label: qsTr("Display rug marks");	info: qsTr("Display rug marks along the x-axis in distribution and correlation plots.")					}
 				DropDown {
-					name: "distributionAndCorrelationPlotHistogramBinWidthType"
-					label: qsTr("Bin width type")
+					name: 	"distributionAndCorrelationPlotHistogramBinWidthType"
+					label: 	qsTr("Bin width type")
+					info:	qsTr("Select method for determining the number of bins in a histogram.")
 					indexDefaultValue: 0
 					values:
 						[
@@ -172,6 +173,7 @@ Form
 				DoubleField
 				{
 					name:			"distributionAndCorrelationPlotHistogramManualNumberOfBins"
+					info:			qsTr("Specify the number of bins if manual method is selected.")
 					label:			qsTr("Number of bins")
 					defaultValue:	30
 					min:			3;
@@ -183,10 +185,10 @@ Form
 
 		Group
 		{
-			CheckBox {				name: "intervalPlot";	label: qsTr("Interval plots")					}
-			CheckBox {				name: "qqPlot";			label: qsTr("Q-Q plots")						}
-			CheckBox {				name: "pieChart";		label: qsTr("Pie charts")						}
-			CheckBox {				name: "dotPlot";		label: qsTr("Dot plots")						}
+			CheckBox {				name: "intervalPlot";	label: qsTr("Interval plots");	info: qsTr("Display interval plots.")					}
+			CheckBox {				name: "qqPlot";			label: qsTr("Q-Q plots");		info: qsTr("Display Q-Q plots.")						}
+			CheckBox {				name: "pieChart";		label: qsTr("Pie charts");		info: qsTr("Display pie charts.")						}
+			CheckBox {				name: "dotPlot";		label: qsTr("Dot plots");		info: qsTr("Display dot plots.")							}
 		}	
 		
 		Group
@@ -197,14 +199,16 @@ Form
 			{			
 				name: 		"paretoPlot"
 				label: 		qsTr("Pareto plots")
+				info:		qsTr("Display Pareto plots.")
 				
 				CheckBox 
 				{			
 					name: 				"paretoPlotRule"	
 					label: 				qsTr("Pareto rule")
+					info:				qsTr("Display Pareto rule in Pareto plots.")
 					childrenOnSameRow: 	true
 					
-					CIField { name: 	"paretoPlotRuleCi" }
+					CIField { name: 	"paretoPlotRuleCi";	info: qsTr("Confidence level for the Pareto plots.") }
 				}
 			}
 			
@@ -212,11 +216,13 @@ Form
 			{	
 				name: 		"likertPlot"
 				label: 		qsTr("Likert plots")	
+				info:		qsTr("Display likert plots")
 
 				CheckBox 
 				{			
 					name: 				"likertPlotAssumeVariablesSameLevel"	
 					label: 				qsTr("Assume all variables share the same levels")
+					info:				qsTr("Assume all variables share the same levels. If selected, all variables are displayed in single plot with their levels merged into one group. If not selected, each variable is displayed in a separate plot.")
 					childrenOnSameRow: 	true
 				}				
 				
@@ -225,6 +231,7 @@ Form
 					id: 				likertPlotAdjustableFontSize
 					name: 				"likertPlotAdjustableFontSize"
 					label: 				qsTr("Adjustable font size for vertical axis")
+					info:				qsTr("Select font size for the likert plots.")
 					indexDefaultValue: 	0
 					values:
 					[
@@ -246,8 +253,9 @@ Form
 
 		DropDown
 		{
-			name: "colorPalette"
-			label: qsTr("Color palette")
+			name: 	"colorPalette"
+			label: 	qsTr("Color palette")
+			info:	qsTr("Select color palette for customizable plots.")
 			indexDefaultValue: 0
 			values:
 			[
@@ -261,8 +269,9 @@ Form
 
 		CheckBox
 		{
-			name: "boxPlot";
-			label: qsTr("Boxplots")
+			name: 	"boxPlot";
+			label: 	qsTr("Boxplots")
+			info:	qsTr("Display boxplots")
 			Group {
 				columns: 2
 				Group {

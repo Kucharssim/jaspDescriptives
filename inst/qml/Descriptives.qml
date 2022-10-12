@@ -26,11 +26,14 @@ import JASP				1.0
 Form
 {
 	columns: 1
+
+	info: qsTr("Descriptives allows the user to obtain basic descriptive statistics, histograms and density plots, correlation plots, boxplots, and frequency tables.")
+
 	VariablesForm
 	{
 		AvailableVariablesList	{ name: "allVariablesList"								}
-		AssignedVariablesList	{ name: "variables";		title: qsTr("Variables")	}
-		AssignedVariablesList	{ name: "splitBy";			title: qsTr("Split");		singleVariable: true; suggestedColumns: ["ordinal", "nominal"];	id: splitBy }
+		AssignedVariablesList	{ name: "variables";		title: qsTr("Variables");	info: qsTr("All variables of interest.")	}
+		AssignedVariablesList	{ name: "splitBy";			title: qsTr("Split");		info: qsTr("Specify a variable by which to split the results.");		singleVariable: true; suggestedColumns: ["ordinal", "nominal"];	id: splitBy }
 	}
 
 	CheckBox
@@ -38,6 +41,7 @@ Form
 		name	: "descriptivesTableTransposed"
 		label	: qsTr("Transpose descriptives table")
 		checked	: false
+		info	: qsTr("Transposes the main descriptives table")
 	}
 
 	Section
@@ -47,19 +51,20 @@ Form
 		Group
 		{
 			title: qsTr("Sample size")
-			CheckBox { name: "valid";			label: qsTr("Valid");	checked: true	}
-			CheckBox { name: "missing";			label: qsTr("Missing");	checked: true	}
+			CheckBox { name: "valid";			label: qsTr("Valid");	checked: true;	info:	qsTr("Return the number of valid cases.")		}
+			CheckBox { name: "missing";			label: qsTr("Missing");	checked: true;	info:	qsTr("Return the Number of missing cases.")	}
 		}
 
 		Group
 		{
 			title:	qsTr("Quantiles")
 
-			CheckBox { name: "quartiles";	label: qsTr("Quartiles") }
+			CheckBox { name: "quartiles";	label: qsTr("Quartiles");	info:	qsTr("Return quartiles.") }
 			CheckBox
 			{
 				name:				"quantilesForEqualGroups"; label: qsTr("Cut points for: ")
 				childrenOnSameRow:	true
+				info:	qsTr("Return quantiles for equal groups.")
 
 				IntegerField
 				{
@@ -68,6 +73,7 @@ Form
 					max:			1000
 					defaultValue:	4
 					afterLabel:		qsTr(" equal groups")
+					info:			qsTr("The number of groups to return the quantiles for.")
 				}
 			}
 
@@ -76,12 +82,14 @@ Form
 				name:				"percentiles"
 				label:				qsTr("Percentiles:")
 				childrenOnSameRow:	true
+				info:				qsTr("Return percentiles.")
 
 				TextField
 				{
 					inputType:	"doubleArray"
 					name:		"percentileValues"
 					fieldWidth: 60
+					info:		qsTr("The percentile values.")
 				}
 			}
 		}
@@ -90,18 +98,18 @@ Form
 		{
 			title: qsTr("Central tendency")
 
-			CheckBox { name: "mode";			label: qsTr("Mode");					}
-			CheckBox { name: "median";			label: qsTr("Median")					}
-			CheckBox { name: "mean";			label: qsTr("Mean");	checked: true	}
+			CheckBox { name: "mode";			label: qsTr("Mode");						info:	qsTr("Return median.")	}
+			CheckBox { name: "median";			label: qsTr("Median");						info:	qsTr("Return mode.")	}
+			CheckBox { name: "mean";			label: qsTr("Mean");	checked: true;		info:	qsTr("Return mean.")	}
 		}
 
 		Group
 		{
 			title:	qsTr("Distribution")
 
-			CheckBox { name: "skewness";			label: qsTr("Skewness")						}
-			CheckBox { name: "kurtosis";			label: qsTr("Kurtosis")						}
-			CheckBox { name: "shapiroWilkTest";		label: qsTr("Shapiro-Wilk test")			}
+			CheckBox { name: "skewness";			label: qsTr("Skewness");						}
+			CheckBox { name: "kurtosis";			label: qsTr("Kurtosis");						}
+			CheckBox { name: "shapiroWilkTest";		label: qsTr("Shapiro-Wilk test");			}
 			CheckBox { name: "sum";					label: qsTr("Sum");							}
 		}
 

@@ -275,13 +275,13 @@ Form
 			Group {
 				columns: 2
 				Group {
-					CheckBox {	name: "boxPlotBoxPlot";			label: qsTr("Boxplot element"); checked: true	}
-					CheckBox {	name: "boxPlotViolin";			label: qsTr("Violin element")					}
-					CheckBox {	name: "boxPlotJitter";			label: qsTr("Jitter element")					}
+					CheckBox {	name: "boxPlotBoxPlot";			label: qsTr("Boxplot element"); checked: true;	info: qsTr("If selected, boxplots will contain the boxplot element.")	}
+					CheckBox {	name: "boxPlotViolin";			label: qsTr("Violin element");					info: qsTr("If selected, boxplots will contain the violin element.")	}
+					CheckBox {	name: "boxPlotJitter";			label: qsTr("Jitter element");					info: qsTr("If selected, boxplots will contain the jitter element.")	}
 				}
 				Group {
-					CheckBox {  name: "boxPlotColourPalette";		label: qsTr("Use color palette")				}
-					CheckBox {	name: "boxPlotOutlierLabel";		label: qsTr("Label outliers")					}
+					CheckBox {  name: "boxPlotColourPalette";		label: qsTr("Use color palette");			info: qsTr("If selected, boxplots will use the specified custom color palette.")		}
+					CheckBox {	name: "boxPlotOutlierLabel";		label: qsTr("Label outliers");				info: qsTr("If selected, outliers in the boxplots will be labelled")					}
 				}
 			}
 		}
@@ -289,50 +289,58 @@ Form
 
 		CheckBox
 		{
-			name: "scatterPlot";	label: qsTr("Scatter plots")
-			columns: 2
+			name: 		"scatterPlot"
+			label: 		qsTr("Scatter plots")
+			info:		qsTr("Display scatter plots")
+			columns:	2
 			RadioButtonGroup
 			{
 				name:	"scatterPlotGraphTypeAbove";
 				title:	qsTr("Graph above scatter plot")
-				RadioButton { value: "density";		label: qsTr("Density");		checked: true	}
-				RadioButton { value: "histogram";	label: qsTr("Histogram")					}
-				RadioButton { value: "none";		label: qsTr("None")							}
+				info:	qsTr("Select the type of graph shown above the scatter plot.")
+				RadioButton { value: "density";		label: qsTr("Density");		checked: true;	info: qsTr("Density estimate is shown.")	}
+				RadioButton { value: "histogram";	label: qsTr("Histogram");					info: qsTr("Histogram is shown.")			}
+				RadioButton { value: "none";		label: qsTr("None");						info: qsTr("No plot is shown")				}
 			}
 			RadioButtonGroup
 			{
 				name:	"scatterPlotGraphTypeRight";
-				title:	qsTr("Graph right of scatter plot")
-				RadioButton { value: "density";		label: qsTr("Density");		checked: true	}
-				RadioButton { value: "histogram";	label: qsTr("Histogram")					}
-				RadioButton { value: "none";		label: qsTr("None")							}
+				title:	qsTr("Graph right to scatter plot")
+				info:	qsTr("Select the type of graph shown right to the scatter plot.")
+				RadioButton { value: "density";		label: qsTr("Density");		checked: true;	info: qsTr("Density estimate is shown.")	}
+				RadioButton { value: "histogram";	label: qsTr("Histogram");					info: qsTr("Histogram is shown.")			}
+				RadioButton { value: "none";		label: qsTr("None");						info: qsTr("No plot is shown")				}
 			}
 			CheckBox
 			{
-				name: "scatterPlotRegressionLine"
-				label: qsTr("Add regression line")
+				name: 	"scatterPlotRegressionLine"
+				label:	qsTr("Add regression line")
+				info:	qsTr("Add regression line to the scatter plot.")
 				checked: true
 				RadioButtonGroup
 				{
 					name:	"scatterPlotRegressionLineType";
-					RadioButton { value: "smooth";	label: qsTr("Smooth");	checked: true	}
-					RadioButton { value: "linear";	label: qsTr("Linear")					}
+					info:	qsTr("Select the type of regression line in the scatter plot.")
+					RadioButton { value: "smooth";	label: qsTr("Smooth");	checked: true;	info: qsTr("If less than a 1,000 data points, local polynomial regression line is fitted through the data. Otherwise a generalized additive model is fitted through the data.")	}
+					RadioButton { value: "linear";	label: qsTr("Linear");					info: qsTr("Linear regression line is fitted through the data.")					}
 				}
 
 				CheckBox
 				{
-					name: "scatterPlotRegressionLineCi"
-					label: qsTr("Show confidence interval")
-					checked: true
-					childrenOnSameRow: true
-					CIField {	name: "scatterPlotRegressionLineCiLevel" }
+					name: 				"scatterPlotRegressionLineCi"
+					label: 				qsTr("Show confidence interval")
+					info:				qsTr("Add confidence interval around the regression line.")
+					checked:			true
+					childrenOnSameRow:	true
+					CIField {	name: "scatterPlotRegressionLineCiLevel";	info: qsTr("Confidence level of the regression line confidence interval.") }
 				}
 			}
 			CheckBox
 			{
 				enabled: splitBy.count > 0
-				name: "scatterPlotLegend"
-				label: qsTr("Show legend")
+				name:	"scatterPlotLegend"
+				label:	qsTr("Show legend")
+				info:	qsTr("Add legend to the scatter plot.")
 				checked: true
 			}
 		}
@@ -364,11 +372,13 @@ Form
 			{ 
 				name: 		"densityPlot"
 				label: 		qsTr("Display density plots") 
+				info:		qsTr("Display density plots.")
 			
 				DoubleField
 				{
 					name:			"densityPlotTransparency"
 					label:			qsTr("Transparency")
+					info:			qsTr("Select transparency level (between 0 and 100) of the density elements.")
 					fieldWidth:		32
 					defaultValue:	20
 					min:			0
@@ -391,25 +401,28 @@ Form
 				name: "heatmapHorizontalAxis"
 				label: qsTr("Horizontal axis:")
 				singleVariable: true
+				info:	qsTr("Select variable for the horizontal axis of the heatmap plots.")
 			}
 			AssignedVariablesList
 			{
 				name: "heatmapVerticalAxis"
 				label: qsTr("Vertical axis:")
 				singleVariable: true
+				info:	qsTr("Select variable for the vertical axis of the heatmap plots.")
 			}
 		}
 
 		Group
 		{
 			indent: true
-			CheckBox { name: "heatmapLegend"; label: qsTr("Display legend")	}
+			CheckBox { name: "heatmapLegend"; label: qsTr("Display legend");	info: qsTr("Display legend for the heatmap plots.")	}
 			CheckBox
 			{
 				name: "heatmapDisplayValue"; label: qsTr("Display value"); childrenOnSameRow: false;
-				DoubleField { name: "heatmapDisplayValueRelativeTextSize"; label: qsTr("Relative text size"); negativeValues: false; defaultValue: 1 }
+				info: qsTr("Display value inside of each tile of the heatmap plot.")
+				DoubleField { name: "heatmapDisplayValueRelativeTextSize"; label: qsTr("Relative text size"); negativeValues: false; defaultValue: 1; info: qsTr("Select the font size of the tile values in the heatmap plots.") }
 			}
-			DoubleField { name: "heatmapTileWidthHeightRatio"; label: qsTr("Width to height ratio of tiles"); negativeValues: false; defaultValue: 1}
+			DoubleField { name: "heatmapTileWidthHeightRatio"; label: qsTr("Width to height ratio of tiles"); negativeValues: false; defaultValue: 1; info: qsTr("Adjust the ratio of width to height of the tiles in the heatmap plot. By default it is set to 1 which results in square tiles.")}
 
 			Group
 			{
@@ -417,21 +430,23 @@ Form
 				title: qsTr("Statistic to plot")
 				RadioButtonGroup
 				{
-					name: "heatmapStatisticContinuous"
-					title: qsTr("For scale variables")
-					RadioButton { value: "mean";		label: qsTr("Mean");	checked: true }
-					RadioButton { value: "median";		label: qsTr("Median") }
-					RadioButton { value: "identity";	label: qsTr("Value itself") }
-					RadioButton { value: "length";		label: qsTr("Number of observations") }
+					name: 	"heatmapStatisticContinuous"
+					title:	qsTr("For scale variables")
+					info:	qsTr("Select what values of selected continuous variables are supposed to be as the basis for the heatmap plots.")
+					RadioButton { value: "mean";		label: qsTr("Mean");	checked: true;	info: qsTr("The mean (excluding missing values) is calculated from the values for each tile.") 													}
+					RadioButton { value: "median";		label: qsTr("Median");					info: qsTr("The median (excluding missing values) is calculated from the values for each tile.")												}
+					RadioButton { value: "identity";	label: qsTr("Value itself");			info: qsTr("The value of the variable is drawn in each tile. This option works only if every tile in the plot has only zero or one values.") 	}
+					RadioButton { value: "length";		label: qsTr("Number of observations");	info: qsTr("The number of valid (i.e., non-missing) observations is calculated for each tile.") 												}
 				}
 
 				RadioButtonGroup
 				{
-					name: "heatmapStatisticDiscrete"
-					title: qsTr("For nominal and ordinal variables")
-					RadioButton { value: "mode";		label: qsTr("Mode");	checked: true }
-					RadioButton { value: "identity";	label: qsTr("Value itself") }
-					RadioButton { value: "length";		label: qsTr("Number of observations") }
+					name: 	"heatmapStatisticDiscrete"
+					title:	qsTr("For nominal and ordinal variables")
+					info:	qsTr("Select what values of selected continuous variables are supposed to be as the basis for the heatmap plots.")
+					RadioButton { value: "mode";		label: qsTr("Mode");	checked: true;	info: qsTr("The mode (excluding missing values) is calculated from the values for each tile.") 													}
+					RadioButton { value: "identity";	label: qsTr("Value itself");			info: qsTr("The value of the variable is drawn in each tile. This option works only if every tile in the plot has only zero or one values.")	}
+					RadioButton { value: "length";		label: qsTr("Number of observations");	info: qsTr("The number of valid (i.e., non-missing) observations is calculated for each tile.") 												}
 				}
 			}
 		}
@@ -445,10 +460,12 @@ Form
 		{
 			name:			"frequencyTables"
 			label:			qsTr("Frequency tables")
+			info:			qsTr("Display frequency tables.")
 			IntegerField
 			{
 				name:			"frequencyTablesMaximumDistinctValues"
 				label:			qsTr("Maximum distinct values")
+				info:			qsTr("Select the maximum of distinct values to show in the frequency tables.")
 				min:			1
 				defaultValue:	10
 				fieldWidth:		50
@@ -459,12 +476,12 @@ Form
 		{
 			name	: "stemAndLeaf";
 			label	: qsTr("Stem and leaf tables")
+			info:	: qsTr("Display stem and leaf tables.")
 			DoubleField
 			{
 				name: "stemAndLeafScale";	label: qsTr("scale");	negativeValues: false;	inclusive: JASP.MaxOnly;	max: 200;	defaultValue: 1.0;
 				info: qsTr("The scale parameter controls how much the table is expanded. For example, scale = 2 will cause the table to be roughly twice as long as the default (scale = 1).")
 			}
-			info	: qsTr("Create a Stem and leaf table.")
 		}
 
 	}

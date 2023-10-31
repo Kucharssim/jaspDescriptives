@@ -1,4 +1,5 @@
 import(jaspBase)
+importFrom(Rdpack, reprompt)
 export(Descriptives)
 export(DescriptivesInternal)
 export(.descriptivesScatterPlots)

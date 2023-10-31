@@ -19,3 +19,4 @@ Remotes:
   jasp-stats/jaspBase,
   jasp-stats/jaspGraphs
 RdMacros: Rdpack
+RoxygenNote: 7.2.3

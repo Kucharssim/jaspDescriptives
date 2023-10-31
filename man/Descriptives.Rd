@@ -97,15 +97,18 @@ Descriptives(
 )
 }
 \arguments{
-\item{correlationPlots}{Displays a matrix of plots between continuous variables, with scatterplots between the variables in the off-diagonal entries, and histograms and density plots in the diagonal entries. The line represents the fit of a 1st, 2nd, 3rd, or 4th order polynomial \insertCite{@the selection is based on the Bayesian information criterion, @schwarz1978estimating}{jaspDescriptives}.}
+\item{correlationPlots}{Displays a matrix of plots between continuous variables, with scatterplots between the variables in the off-diagonal entries, and histograms and density plots in the diagonal entries. The line represents the fit of a 1st, 2nd, 3rd, or 4th order polynomial \insertCite{@the selection is based on the Bayesian information criterion, @schwarz1978estimating}{jaspDescriptives}.
+
+\insertNoCite{R}{jaspDescriptives}
+\insertNoCite{ggplot2}{jaspDescriptives}
+\insertNoCite{ggrepel}{jaspDescriptives}}
 }
 \description{
-Descriptives allows the user to obtain basic descriptive statistics, histograms and density plots, correlation plots, boxplots, and frequency tables. For introduction to descriptive analyses please see \insertCite{moore2009introduction,whitlock2015analysis;textual}{jaspDescriptives}.
+Descriptives allows the user to obtain basic descriptive statistics, histograms and density plots, correlation plots, boxplots, and frequency tables.
+For introduction to descriptive analyses please see \insertCite{moore2009introduction,whitlock2015analysis;textual}{jaspDescriptives}.
+
+These two citations conflict so they should be distinguished by subscripts \insertCite{wagenmakers2020absence,wagenmakers2020efficacy}{jaspDescriptives}, but they aren't.
 }
 \references{
 \insertAllCited{}
-
-\insertRef{ggplot2}{jaspDescriptives}
-
-\insertRef{ggrepel}{jaspDescriptives}
 }
